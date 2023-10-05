@@ -1,0 +1,8 @@
+{
+    "name": "Knight",
+    "abbreviatedName": "k",
+    "description": "Your knights are at your command. Armed with sharp lances and riding fight-ready horses they easily scatter bandits from your lands.",
+    "action": 0,
+    "actionDescription": "Allows you to move the bandits onto another tile of your choice.",
+    "pictureName": "knights.png"
+}

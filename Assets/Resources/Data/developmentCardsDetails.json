@@ -1,0 +1,53 @@
+{
+    "CardsDetails":
+    [
+        {
+            "Name": "Knight",
+            "AbbreviatedName": "k",
+            "Description": "Your knights are at your command. Armed with sharp lances and riding battle-ready horses they easily scatter bandits from your lands.",
+            "Action": 0,
+            "ActionDescription": "Allows you to move the bandits onto another tile of your choice.",
+            "PictureName": "knights.png"
+        },
+        {
+            "Name": "Roads",
+            "AbbreviatedName": "r",
+            "Description": "It is said that all roads lead to Rome. That place has not been found yet, but what may lay at the end of this path?",
+            "Action": 1,
+            "ActionDescription": "Allows you to place 2 roads for free. Use with care, if there are no possible places for a road to put, this card is still exhausted.",
+            "PictureName": "roads.png"
+        },
+        {
+            "Name": "Development",
+            "AbbreviatedName": "d",
+            "Description": "The creative minds of your realm alway come up with new ideas to gain access to new ressources.",
+            "Action": 2,
+            "ActionDescription": "Allows you to take 2 ressources of your choice from the bank.",
+            "PictureName": "development.png"
+        },
+        {
+            "Name": "Monopoly",
+            "AbbreviatedName": "m",
+            "Description": "Being faced with your unrivaled economic power, your enemies are willing to give up almost anything to divert your gaze from them.",
+            "Action": 3,
+            "ActionDescription": "You are allowed to choose one ressource type. Every other player then turns in all of his ressources of that type to you.",
+            "PictureName": "monopoly.png"
+        },
+        {
+            "Name": "Points",
+            "AbbreviatedName": "p",
+            "Description": "-",
+            "Action": 4,
+            "ActionDescription": "-",
+            "PictureName": "knights.png"
+        },
+        {
+            "Name": "None",
+            "AbbreviatedName": "n",
+            "Description": "Something went wrong here..",
+            "Action": 5,
+            "ActionDescription": "-",
+            "PictureName": ""
+        }
+    ]
+}
