@@ -53,6 +53,10 @@ public class TileVisualEffects : MonoBehaviour
         numberText.color = color;
     }
 
+    public void HideNumberText(){
+        numberText.SetText("");
+    }
+
     public void SetBanditVisibility(bool visible){
         bandit.SetActive(visible);
     }

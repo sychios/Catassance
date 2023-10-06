@@ -44,7 +44,7 @@ public class BoardManager : MonoBehaviour
     public Tile CurrentBanditTile => _currentBanditTile;
     private Tile _currentBanditTile;
 
-    // 2D array of size 6x7 is used, so that board is centered with empty rows/columns above/below/left/right.
+    // 2D array of size 7x7 is used, so that board is centered with empty rows/columns above/below/left/right.
     // To achieve that behaviour every position indexing with board data from the tile-position-gameobjects is modified by +1.
     // This should prevent indexOutOfRangeExceptions
     // 7 is needed as middle row is has size of 5 tiles
@@ -76,7 +76,6 @@ public class BoardManager : MonoBehaviour
     */
     private List<Vector2> GenerateShuffledList(){
         List<Vector2> lst = new List<Vector2>();
-        Vector2 desertProperties = new Vector2(5, -1);
 
         // Initialise all types and numbers
         List<int> types = new List<int>(){0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,4,4,4};
@@ -86,6 +85,7 @@ public class BoardManager : MonoBehaviour
         int tmpNumber;
         int random;
 
+        // TODO: put shuffline of a list into utility script, is used 
         // Shuffle lists
         for(int shuffleStep = 0; shuffleStep<types.Count; shuffleStep++){
             tmpType = types[shuffleStep];
