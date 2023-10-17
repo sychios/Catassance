@@ -115,7 +115,7 @@ public class RoadManager : MonoBehaviour
 
     public void SetAllNodesVisibility(bool visible){
         for(int index = 0; index < AllNodes.Length; ++index){
-            AllNodes[index].SetVisibilityIfBuildable(visible);
+            AllNodes[index].SetNodeVisibilityIfBuildable(visible);
         }
     }
 

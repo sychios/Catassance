@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Node : MonoBehaviour
@@ -59,11 +61,9 @@ public class Node : MonoBehaviour
     }
 
 
-
+    // 
     void AddNodeToAffectedTiles(){
-        for(int index = 0; index < AffectedTiles.Count; ++index){
-            AffectedTiles[index].AddDependentNode(this);
-        }
+        AffectedTiles.ForEach(tile => tile.AddDependentNode(this));
     }
 
     void IncreaseYieldOfAffectedTiles(int increaseAmount, int playerID){
@@ -72,9 +72,7 @@ public class Node : MonoBehaviour
             return;
         }
 
-        for(int index = 0; index < AffectedTiles.Count; ++index){
-            AffectedTiles[index].IncreaseYieldForPlayerID(increaseAmount, playerID);
-        }
+        AffectedTiles.ForEach(tile => tile.IncreaseYieldForPlayerID(increaseAmount, playerID));
     }
 
     public void PlaceVillage(){
@@ -92,13 +90,13 @@ public class Node : MonoBehaviour
         }
 
         // Hide node
-        SetVisibilityIfBuildable(false);
+        SetNodeVisibilityIfBuildable(false);
 
         // Hide neighbour nodes and prohibit building on them
         Node neighbourNode;
         foreach(GameObject go in NodeUtility.directNeighbours){
             neighbourNode = go.GetComponent<Node>();
-            neighbourNode.SetVisibilityIfBuildable(false);
+            neighbourNode.SetNodeVisibilityIfBuildable(false);
             neighbourNode.IsBuildable = false;
         }
 
@@ -161,10 +159,7 @@ public class Node : MonoBehaviour
         currentBuilding = Instantiate(prefabTown, transform.position, Quaternion.identity);
 
         // Set color of town
-        var meshRendererComponents = currentBuilding.GetComponentsInChildren<MeshRenderer>();
-        for(int index = 0; index < meshRendererComponents.Length; ++index){
-            meshRendererComponents[index].material.color = currentPlayer.PlayerColor;
-        }
+        Array.ForEach(currentBuilding.GetComponentsInChildren<MeshRenderer>(), meshRenderer => meshRenderer.material.color = currentPlayer.PlayerColor);
 
         IsUpgradeable = false;
 
@@ -178,33 +173,25 @@ public class Node : MonoBehaviour
         currentPlayer.PlayerRessources.DiscardRessources(RessourcesManager.instance.RessourceAmountPerTown);
     }
 
-    public void SetVisibilityIfBuildable(bool visible){
+    public void SetNodeVisibilityIfBuildable(bool visible){
         this.gameObject.GetComponent<MeshRenderer>().enabled = IsBuildable && visible;
         this.gameObject.GetComponent<CapsuleCollider>().enabled = IsBuildable && visible;
     }
 
     void OnMouseOver(){
-        meshRenderer.material.color = PlayerManager.instance.CurrentPlayer.PlayerColor;
         isHovered = true;
 
-    	MeshRenderer nMeshRenderer;
-        foreach(GameObject go in NodeUtility.directNeighbours.ToArray()){
-            nMeshRenderer = go.GetComponent<MeshRenderer>();
-            if(nMeshRenderer != null)
-                nMeshRenderer.material.color = PlayerManager.instance.CurrentPlayer.PlayerColor * 0.75f;
-        }
+        var newColor = PlayerManager.instance.CurrentPlayer.PlayerColor;
+
+        this.meshRenderer.material.color = newColor;
+        NodeUtility.directNeighbours.ForEach(nb => nb.GetComponent<MeshRenderer>().material.color = newColor * 0.75f);
     }
 
     void OnMouseExit(){
-        meshRenderer.material.color = originalColor;
         isHovered = false;
-        
-    	MeshRenderer nMeshRenderer;
-        foreach(GameObject go in NodeUtility.directNeighbours.ToArray()){
-            nMeshRenderer = go.GetComponent<MeshRenderer>();
-            if(nMeshRenderer != null)
-                nMeshRenderer.material.color = originalColor;
-        }
+
+        this.meshRenderer.material.color = originalColor;
+        NodeUtility.directNeighbours.ForEach(nb => nb.GetComponent<MeshRenderer>().material.color = originalColor);
     }
 
 }

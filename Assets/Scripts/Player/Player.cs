@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
 
     private void SetVisibilityOfAccessibleNodes(bool visible){
         for(int index = 0; index < AccessibleNodes.Count; ++index){
-            AccessibleNodes[index].SetVisibilityIfBuildable(visible);
+            AccessibleNodes[index].SetNodeVisibilityIfBuildable(visible);
         }
     }
 
