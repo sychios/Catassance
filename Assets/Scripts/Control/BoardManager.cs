@@ -85,8 +85,11 @@ public class BoardManager : MonoBehaviour
         int tmpNumber;
         int random;
 
-        // TODO: put shuffline of a list into utility script, is used 
+        types = ListUtilities.ShuffleList(types);
+        numbers = ListUtilities.ShuffleList(numbers);
+
         // Shuffle lists
+        /*
         for(int shuffleStep = 0; shuffleStep<types.Count; shuffleStep++){
             tmpType = types[shuffleStep];
             random = UnityEngine.Random.Range(shuffleStep, types.Count);
@@ -100,6 +103,7 @@ public class BoardManager : MonoBehaviour
             numbers[shuffleStep] = numbers[random];
             numbers[random] = tmpNumber;
         }
+        */
 
         // Add desert (5,1)
         random = UnityEngine.Random.Range(0, types.Count);

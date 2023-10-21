@@ -20,6 +20,7 @@ public class NodeUtilities : MonoBehaviour
     // Position information
     private bool nameIsEven;
 
+    // Nodes this node can connect to with a road
     public List<GameObject> directNeighbours {get; private set;}= new List<GameObject>();
 
     // Indicates whether a road to the Node with this NodeUtilities has already been spawned.
