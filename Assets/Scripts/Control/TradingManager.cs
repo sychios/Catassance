@@ -1,9 +1,8 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
-using System;
 
 public class TradingManager : MonoBehaviour
 {    
@@ -55,18 +54,19 @@ public class TradingManager : MonoBehaviour
 
     // Button collections
     // Important: Add Buttons in order of RessourceEnum in RessourcesManager
-    private Button[] receiveButtons;
-    private Button[] discardButtons;
+    private Button[] receiveButtons; // +
+    private Button[] discardButtons; // -
 
     // Ressource amount collection
     // Important: Add text fields in order of RessourceEnum in RessourceManager
     private TMPro.TMP_Text[] ressourceAmountTexts;
 
 
-    // Player references
+    // Conversion rate for each ressource in type-order
     private int[] playerConversionRates;
+    // Ressources of the player before opening trade panel (or after a completed trade and beginning a new one)
     private Dictionary<int, int> initialPlayerRessources;
-    // Current state of player ressources modified by trade decisions (e.g. after choosing the discarding ressource)
+    // Dynamic state of player ressources modified by trade decisions (e.g. after choosing the discarding ressource)
     private Dictionary<int, int> currentPlayerRessources; 
 
     // Discarding/Receiving Ressource
@@ -87,30 +87,41 @@ public class TradingManager : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    // TODO: for multiplayer/singleplayer with ai it is preferable to not use the current player of the manager but THIS player
+    // Before each trade, get the players ressource and conversion rates. These can change between multiple trades in a single turn
     public void InitialisePanel(){
         this.gameObject.SetActive(true);
 
-        // Set current player ressources and their conversion rates
-        initialPlayerRessources = PlayerManager.instance.CurrentPlayer.PlayerRessources.AmountPerRessourceType;
-        currentPlayerRessources = PlayerManager.instance.CurrentPlayer.PlayerRessources.AmountPerRessourceType;
+        // Set player ressources and their conversion rates
+        initialPlayerRessources = CloneDictionary(PlayerManager.instance.CurrentPlayer.PlayerRessources.AmountPerRessourceType);
+        currentPlayerRessources = CloneDictionary(PlayerManager.instance.CurrentPlayer.PlayerRessources.AmountPerRessourceType);
         playerConversionRates = PlayerManager.instance.CurrentPlayer.PlayerRessources.RessourceConversionRates;
 
         discardingRessourceIsChosen = false;
         receivingRessourceIsChosen = false;
-
 
         // Set UI texts
         SetRessourceAmountTextsWithColorReset(initialPlayerRessources, true);
 
         // Disable all plus buttons from interaction, allow subtract buttons only if conversion rate is satisfied
         SetReceiveButtonsInteractable(false);
-        SetDiscardButtonsInteractableIfConversionRateSatisfied();
+        SetDiscardButtonsInteractableIfConversionRateIsSatisfied();
         
         acceptTradeButton.interactable = false;
     }
 
+    // TODO: extend dictionary file OR put into utility file OR to player ressource
+    private Dictionary<int, int> CloneDictionary(Dictionary<int, int> original){
+        var newDict = new Dictionary<int, int>();
+        foreach(KeyValuePair<int, int> kv in original){
+            newDict.Add(kv.Key, kv.Value);
+        }
+        return newDict;
+    }
+
     public void UIButtonDiscardRessourceClicked(int ressourceAsInt){
         int updatedRessourceAmount;
+            
 
         // Player wants to annulate the receiving ressource?
         if(receivingRessourceIsChosen && ((int) receivingRessource == ressourceAsInt)){
@@ -128,6 +139,7 @@ public class TradingManager : MonoBehaviour
             currentPlayerRessources[ressourceAsInt] = updatedRessourceAmount;
 
             acceptTradeButton.interactable = false;
+            
             return;
         }
 
@@ -173,9 +185,8 @@ public class TradingManager : MonoBehaviour
         // Add ressources
         playerRessourcesComponent.SetRessourceToAmount(receivingRessource, currentPlayerRessources[(int) receivingRessource]);
 
-
         // Initiliase panel for new trade
-        InitialisePanel();        
+        InitialisePanel();
     }
 
     public void UIButtonClosePanelClicked(){
@@ -197,6 +208,7 @@ public class TradingManager : MonoBehaviour
             acceptTradeButton.interactable = false;
             SetReceiveButtonsInteractable(false);
             SetDiscardButtonsInteractable(true);
+
             return;
         }
 
@@ -236,16 +248,14 @@ public class TradingManager : MonoBehaviour
         }
     }
 
-    void SetDiscardButtonsInteractableIfConversionRateSatisfied(){
+    void SetDiscardButtonsInteractableIfConversionRateIsSatisfied(){
         for(int index = 0; index < discardButtons.Length; ++index){
             discardButtons[index].interactable = initialPlayerRessources[index] >= playerConversionRates[index];
         }
     }
 
     void SetDiscardButtonsInteractable(bool interactable){
-        for(int index = 0; index < discardButtons.Length; ++index){
-            discardButtons[index].interactable = interactable;
-        }
+        Array.ForEach(discardButtons, button => button.interactable = interactable);
     }
     
     void SetDiscardButtonsInteractableWithException(bool interactable, int exceptionIndex=-1){
@@ -259,9 +269,7 @@ public class TradingManager : MonoBehaviour
     }
 
     void SetReceiveButtonsInteractable(bool interactable){
-        for(int index = 0; index < receiveButtons.Length; ++index){
-            receiveButtons[index].interactable = interactable;
-        }
+        Array.ForEach(receiveButtons, button => button.interactable = interactable);
     }
 
     public int GetCurrentRessourceAmount(int ressourceAsInt){

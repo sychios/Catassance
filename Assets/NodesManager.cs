@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -13,7 +12,7 @@ public class NodesManager : MonoBehaviour
     void Awake()
     {
         childrenTransform = transform.GetComponentsInChildren<Transform>().ToList();
-        childrenTransform.RemoveAt(0); // Remove parent, which is always at index 0
+        childrenTransform.Remove(this.transform); // Remove parent transform (this)
         childrenTransform.ForEach(child => child.AddComponent<NodeUtilities>());
     }
 }

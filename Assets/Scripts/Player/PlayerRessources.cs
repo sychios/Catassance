@@ -16,6 +16,7 @@ public class PlayerRessources : MonoBehaviour
     [SerializeField]
     private int baseConversionRate = 4;
 
+    // TODO: make private and offer field
     // Holds the amount of ressource player owns
     public Dictionary<int, int> AmountPerRessourceType {get; private set;} = new Dictionary<int, int>();
 

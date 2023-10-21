@@ -90,10 +90,10 @@ public class TileVisualEffects : MonoBehaviour
     }
 
     private IEnumerator yieldAnimation(){
-        tileTransform.position += new Vector3(0f, .2f, 0f);
+        tileTransform.position += new Vector3(0f, .15f, 0f);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.75f);
 
-        tileTransform.position -= new Vector3(0f, .2f, 0f);
+        tileTransform.position -= new Vector3(0f, .15f, 0f);
     }
 }
